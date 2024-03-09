@@ -10,7 +10,7 @@ export default function Home() {
           placeholder="Hadoop, MapReduce, Javascript..."
           className="mb-8 w-2/3 px-3 py-2 border border-black bg-white rounded focus:outline-none focus:border-blue-500"
         />
-        <button className=" font-bold text-xl px-4 py-2 bg-primary-btn border border-black rounded-md shadow-solid hover:shadow-solid-hover focus:outline-none focus:border-blue-500">
+        <button className="transition-all duration-300 font-bold text-xl px-4 py-2 bg-primary-btn border border-black rounded-md shadow-solid hover:shadow-solid-hover focus:outline-none focus:border-blue-500">
             Generate Exam!
         </button>
       </div>
