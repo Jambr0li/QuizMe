@@ -82,16 +82,16 @@ export default function Header({ initialUser }) {
   };
 
   return (
-    <header className="p-4 flex flex-row justify-between bg-black">
+    <header className="fixed min-w-full p-4 flex flex-row justify-between bg-black">
       {user ? (
         <>
-          <div className="p-2">
-            <p className="">{user.displayName}</p>
-          </div>
           <div className="p-2 border-white border rounded">
             <a href="#" onClick={handleSignOut}>
               Sign Out
             </a>
+          </div>
+          <div className="p-2">
+            <p className="">{user.displayName}</p>
           </div>
         </>
       ) : (
