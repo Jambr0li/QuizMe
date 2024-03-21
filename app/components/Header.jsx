@@ -6,43 +6,11 @@ import {
   signOut,
   onAuthStateChanged,
 } from "@/firebase/auth.js";
-import { useRouter } from "next/router";
-
-// function useUserSession(initialUser) {
-// 	// The initialUser comes from the server via a server component
-// 	const [user, setUser] = useState(initialUser);
-// 	const router = useRouter()
-
-// 	useEffect(() => {
-// 		const unsubscribe = onAuthStateChanged((authUser) => {
-// 			setUser(authUser)
-// 		})
-
-// 		return () => unsubscribe()
-// 		// eslint-disable-next-line react-hooks/exhaustive-deps
-// 	}, [])
-
-// 	useEffect(() => {
-// 		onAuthStateChanged((authUser) => {
-// 			if (user === undefined) return
-
-// 			// refresh when user changed to ease testing
-// 			if (user?.email !== authUser?.email) {
-// 				router.refresh()
-// 			}
-// 		})
-// 		// eslint-disable-next-line react-hooks/exhaustive-deps
-// 	}, [user])
-
-// 	return user;
-// }
 
 export default function Header({ initialUser }) {
-  // =======
   function useUserSession(initialUser) {
     // The initialUser comes from the server via a server component
     const [user, setUser] = useState(initialUser);
-    // const router = useRouter()
 
     useEffect(() => {
       const unsubscribe = onAuthStateChanged((authUser) => {
@@ -50,7 +18,6 @@ export default function Header({ initialUser }) {
       });
 
       return () => unsubscribe();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -62,12 +29,10 @@ export default function Header({ initialUser }) {
           router.refresh();
         }
       });
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     return user;
   }
-  // =======
 
   const user = useUserSession(initialUser);
 
