@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, cloneElement } from "react";
 import {
   signInWithGoogle,
   signOut,
@@ -51,8 +51,11 @@ export default function Header({ initialUser }) {
     if (!user) return;
 
     const checkAndCreateUser = async () => {
-      if (!checkUserInDatabase(user)) {
-        createUserInDatabase(user);
+      const userExists = await checkUserInDatabase(user);
+      console.log("userExists = ",userExists);
+      if (!userExists) {
+        console.log("User not found in database, creating user in database")
+        await createUserInDatabase(user);
       }
     };
     checkAndCreateUser();
@@ -88,7 +91,7 @@ export default function Header({ initialUser }) {
 const checkUserInDatabase = async (user) => {
   // check if user exists in database
   console.log(`Checking if user exists in database: ${user.uid}`)
-  const client = new DynamoDBClient({ region: "us-west-2",accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID, secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY});
+  const client = new DynamoDBClient({ region: process.env.NEXT_PUBLIC_AWS_REGION, credentials: { accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID, secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY}});
   const command = new GetItemCommand({
     TableName: "Quiz-Me",
     Key: {
@@ -96,24 +99,26 @@ const checkUserInDatabase = async (user) => {
       "FileCreationDate": { S: "Long Time Ago In A Land Far Away" },
     }
   });
-
+  console.log("Just before the try")
   try {
+    console.log("Just inside the try before the send command")
     const response = await client.send(command);
+    console.log("Just inside the try after the send command")
+    console.log("checked user in database",response);
     if (response.Item) {
-      return True;
+      return true;
     }
-    return False;
+    console.log("User not found in database")
+    return false;
   } catch (error) {
     console.error("Failed to send request to DynamoDB",error);
     return error;
   }
-  // if not, create user
-  // if so, return user
-  // return user;
 }
 
 const createUserInDatabase = async (user) => {
-  const client = new DynamoDBClient();
+  // const client = new DynamoDBClient();
+  const client = new DynamoDBClient({ region: process.env.NEXT_PUBLIC_AWS_REGION, credentials: { accessKeyId: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID, secretAccessKey: process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY}});
   const command = new PutItemCommand({
     TableName: "Quiz-Me",
     Item: {
@@ -124,6 +129,7 @@ const createUserInDatabase = async (user) => {
 
   try {
     const response = await client.send(command);
+    console.log("Successfully created user in database",response);
     return response;
   } catch (error) {
     console.error("Failed to send request to DynamoDB",error);
