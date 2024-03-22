@@ -1,6 +1,6 @@
 "use client";
 
-import PromptForm from "@/components/PromptForm";
+import PromptForm from "./components/PromptForm";
 import {useState} from "react";
 
 export default function Home() {
