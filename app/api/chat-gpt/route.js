@@ -32,6 +32,6 @@ export async function POST(request) {
         frequency_penalty: 0,
         presence_penalty: 0,
     })
-
+    console.log(response)
     return NextResponse.json(response)
 }
