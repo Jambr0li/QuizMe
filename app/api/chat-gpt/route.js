@@ -1,4 +1,3 @@
-import { NEXT_BODY_SUFFIX } from "next/dist/lib/constants";
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
 const latex = require("node-latex")
@@ -14,8 +13,6 @@ export async function POST(request) {
 
     // Get user's input
     const params = await request.json();
-
-    console.log(`Calling API with prompt "${params.prompt}"`)
 
     // Pass it to Chat GPT API
     const response = await openai.chat.completions.create({
@@ -43,8 +40,6 @@ export async function POST(request) {
     })
 
     await fs.writeFile("input.tex", response.choices[0].message.content)
-    console.log(response.choices[0].message.content)
-    console.log("Writen!")
 
     const input = createReadStream('input.tex')
     const output = createWriteStream('./public/output.pdf')
@@ -58,7 +53,6 @@ export async function POST(request) {
                 reject();
             })
             pdf.on('finish', () => {
-                console.log('PDF generated!')
                 resolve();
             })
         }); 
@@ -66,6 +60,5 @@ export async function POST(request) {
     
     await pipeFunction();
 
-    console.log("Responding!!")
     return NextResponse.json(response)
 }
