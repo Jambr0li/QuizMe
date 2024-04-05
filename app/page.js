@@ -7,7 +7,6 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center p-24 bg-white text-black">
       <h1 className="text-6xl mb-16 mt-title">Quiz Me</h1>
       <div className="w-full flex flex-col items-center min-h-min">
-        <p className="text-3xl mb-8">What is your exam about?</p>
           <PromptForm />
       </div>
       
