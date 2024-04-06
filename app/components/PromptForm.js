@@ -78,7 +78,6 @@ export default function PromptForm({onSubmit}) {
     <>
         <button onClick={handleInteractiveQuiz} className="bg-black rounded text-white p-2 mb-2">Take Interactive Quiz</button>
         <button className="bg-black rounded text-white p-2">Generate PDFs</button>
-        <p className="text-black">Here is the data:</p>
     </>
     );
 }
