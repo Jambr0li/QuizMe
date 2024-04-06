@@ -1,6 +1,5 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import InteractiveQuiz from "./InteractiveQuiz";
 
 export default function PromptForm({onSubmit}) {
     const router = useRouter();
@@ -33,6 +32,7 @@ export default function PromptForm({onSubmit}) {
             console.log(data)
             console.log(data.choices[0].message.content)
             data = JSON.parse(data.choices[0].message.content)
+            sessionStorage.setItem('quiz-contents', JSON.stringify(data)) // setting sessionData
             console.log("data = " + data);
             console.log(data);
             console.log("typeof data is " + typeof data)
@@ -48,17 +48,12 @@ export default function PromptForm({onSubmit}) {
     };
 
     const handleInteractiveQuiz= () => {
-        setInteractiveQuizActive(true)
+        router.push('/quiz')
     }
 
     if (loading) return (
         <p>Loading...</p>
     );
-    else if (interactiveQuizActive) return ( 
-        <>
-            <InteractiveQuiz testQuestions={dataString}/>
-        </>
-    )
     else if (!haveData) return ( 
         <>
             <p className="text-3xl mb-8">What is your exam about?</p>

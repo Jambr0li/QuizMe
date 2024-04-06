@@ -13,7 +13,7 @@ export async function POST(request) {
 
     // Get user's input
     const params = await request.json();
-    const num_questions = 8
+    const num_questions = 3
 
     // Pass it to Chat GPT API
     const response = await openai.chat.completions.create({

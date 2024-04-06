@@ -1,10 +1,26 @@
-import React, { useState} from "react"
-import Quiz from "./Quiz.jsx"
+"use client"
 
-export default function InteractiveQuiz({ testQuestions }) {
+import React, { useState, useEffect} from "react"
+import Quiz from "../components/Quiz.jsx"
+
+export default function InteractiveQuiz() {
     const[currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const[score, setScore] = useState(0)
+    const [testQuestions, setTestQuestions] = useState(null)
 
+
+    useEffect(() => {
+        const sessionData = sessionStorage.getItem('quiz-contents')
+        if (sessionData) {
+            setTestQuestions(JSON.parse(sessionData))
+        }
+    },[])
+
+    // console.log(testQuestions)
+
+    if (!testQuestions) return (
+        <p>Loading...</p>
+    )
 
     const handleAnswer = (isCorrect) => {
     if (isCorrect){
@@ -37,8 +53,8 @@ export default function InteractiveQuiz({ testQuestions }) {
     )
     else return (
     <main className="bg-gray-300">
-        <div id="question-counter" className="mt-10 ml-24">
-        <p>{currentQuestionIndex + 1} / {testQuestions.questions.length}</p>
+        <div id="question-counter" className="pl-24 pt-32">
+            <p>Question {currentQuestionIndex + 1} / {testQuestions.questions.length}</p>
         </div>
         <div className="flex flex-col justify-center p-24 bg-gray-300">
         <div className="bg-white p-10 rounded-3xl">
