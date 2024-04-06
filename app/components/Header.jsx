@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, cloneElement } from "react";
+import { useRouter } from "next/navigation"
 import {
   signInWithGoogle,
   signOut,
@@ -9,6 +10,7 @@ import {
 import { PutItemCommand, DynamoDBClient, GetItemCommand } from "@aws-sdk/client-dynamodb";
 
 export default function Header({ initialUser }) {
+  const router = useRouter()
   function useUserSession(initialUser) {
     // The initialUser comes from the server via a server component
     const [user, setUser] = useState(initialUser);
@@ -63,6 +65,10 @@ export default function Header({ initialUser }) {
   }, [user]);
 
   
+  const handleHomeClick = () => {
+    router.push('/')
+  }
+
   return (
     <header className="fixed min-w-full p-4 flex flex-row justify-between bg-black">
       {user ? (
@@ -76,12 +82,19 @@ export default function Header({ initialUser }) {
             <p className="">{user.displayName}</p>
           </div>
         </>
-      ) : (
-        <a className="" href="#" onClick={handleSignIn}>
-          <div className="rounded p-2 border-white border">
-            <p>Sign In with Google</p>
-          </div>
-        </a>
+      ) : ( 
+        <>
+          <a className="" href="#" onClick={handleSignIn}>
+            <div className="rounded p-2 border-white border">
+              <p className="text-white">Sign In with Google</p>
+            </div>
+          </a>
+          <a className="" href="#" onClick={handleHomeClick}>
+            <div className="rounded p-2 border-white border">
+              <p className="text-white">Home</p>
+            </div>
+          </a>
+        </>
       )}
     </header>
   );

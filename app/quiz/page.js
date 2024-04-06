@@ -2,8 +2,11 @@
 
 import React, { useState, useEffect} from "react"
 import Quiz from "../components/Quiz.jsx"
+import HomeButton from "../components/HomeButton.js"
+import { useRouter } from "next/navigation"
 
 export default function InteractiveQuiz() {
+    const router = useRouter()
     const[currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const[score, setScore] = useState(0)
     const [testQuestions, setTestQuestions] = useState(null)
@@ -48,6 +51,10 @@ export default function InteractiveQuiz() {
 
     }
 
+    const handleHomeClick = () => {
+        router.push('/')
+    }
+
     if (!testQuestions) return (
         <p className="text-2xl text-black">Something's missing...</p>
     )
@@ -70,7 +77,8 @@ export default function InteractiveQuiz() {
             <h2 className="text-3xl mb-2">Quiz Complete</h2>
             <h2 className="mb-4">Your score is {score} / {testQuestions.questions.length}</h2>
             <button onClick={() => resetQuiz()} className="w-full rounded border-solid border-2 border-black p-4 bg-black text-white">Take It Again</button>
-            <button className="w-full rounded border-solid border-2 border-black p-4 mt-8 bg-black text-white">Home</button>
+            {/* <HomeButton/> */}
+            <button onClick={handleHomeClick} className="w-full rounded border-solid border-2 border-black p-4 mt-8 bg-black text-white">Home</button>
             </div>
         </div>
         </div>
