@@ -1,87 +1,102 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect} from "react"
-import Quiz from "../components/Quiz.jsx"
-import HomeButton from "../components/HomeButton.js"
-import { useRouter } from "next/navigation"
+import React, { useState, useEffect } from "react";
+import Quiz from "../components/Quiz.jsx";
+import HomeButton from "../components/HomeButton.js";
+import { useRouter } from "next/navigation";
 
 export default function InteractiveQuiz() {
-    const router = useRouter()
-    const[currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
-    const[score, setScore] = useState(0)
-    const [testQuestions, setTestQuestions] = useState(null)
+  const router = useRouter();
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [testQuestions, setTestQuestions] = useState(null);
 
-
-    useEffect(() => {
-        const sessionData = sessionStorage.getItem('quiz-contents')
-        if (sessionData) {
-            setTestQuestions(JSON.parse(sessionData))
-        }
-    },[])
-
-    // console.log(testQuestions)
-
-    if (!testQuestions) return (
-        <p>Loading...</p>
-    )
-
-    const handleAnswer = (isCorrect) => {
-    if (isCorrect){
-        console.log("updating score... was " + score)
-        setScore(score + 1)
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem("quiz-contents");
+    if (sessionData) {
+      setTestQuestions(JSON.parse(sessionData));
     }
-    console.log("score is now " + score)
-    const nextQuestionIndex = currentQuestionIndex + 1
+  }, []);
+
+  // console.log(testQuestions)
+
+  if (!testQuestions) return <p>Loading...</p>;
+
+  const handleAnswer = (isCorrect) => {
+    if (isCorrect) {
+      console.log("updating score... was " + score);
+      setScore(score + 1);
+    }
+    console.log("score is now " + score);
+    const nextQuestionIndex = currentQuestionIndex + 1;
     if (nextQuestionIndex < testQuestions.questions.length) {
-        setCurrentQuestionIndex(nextQuestionIndex)
+      setCurrentQuestionIndex(nextQuestionIndex);
     } else {
-        document.getElementById("question-counter").classList.add("hidden")
-        document.getElementById("post-quiz").classList.remove("hidden")
-        document.getElementById("quiz-questions").classList.add("hidden")
+      document.getElementById("question-counter").classList.add("hidden");
+      document.getElementById("post-quiz").classList.remove("hidden");
+      document.getElementById("quiz-questions").classList.add("hidden");
     }
-    };
+  };
 
-    const resetQuiz = () => {
-    setScore(0)
-    setCurrentQuestionIndex(0)
-    document.getElementById("question-counter").classList.remove("hidden")
+  const resetQuiz = () => {
+    setScore(0);
+    setCurrentQuestionIndex(0);
+    document.getElementById("question-counter").classList.remove("hidden");
 
-    document.getElementById("post-quiz").classList.add("hidden")
-    document.getElementById("quiz-questions").classList.remove("hidden")
+    document.getElementById("post-quiz").classList.add("hidden");
+    document.getElementById("quiz-questions").classList.remove("hidden");
+  };
 
-    }
+  const handleHomeClick = () => {
+    router.push("/");
+  };
 
-    const handleHomeClick = () => {
-        router.push('/')
-    }
-
-    if (!testQuestions) return (
-        <p className="text-2xl text-black">Something's missing...</p>
-    )
-    else return (
-    <main className="bg-gray-300">
+  if (!testQuestions)
+    return <p className="text-2xl text-black">Something's missing...</p>;
+  else
+    return (
+      <main className="bg-gray-300 text-black">
         <div id="question-counter" className="pl-24 pt-32">
-            <p>Question {currentQuestionIndex + 1} / {testQuestions.questions.length}</p>
+          <p>
+            Question {currentQuestionIndex + 1} /{" "}
+            {testQuestions.questions.length}
+          </p>
         </div>
         <div className="flex flex-col justify-center p-24 bg-gray-300">
-        <div className="bg-white p-10 rounded-3xl">
+          <div className="bg-white p-10 rounded-3xl">
             <div id="quiz-questions">
-            {testQuestions && currentQuestionIndex < testQuestions.questions.length && (
-                <Quiz 
-                question={testQuestions.questions[currentQuestionIndex]}
-                onAnswer={handleAnswer} 
-                />
-            )}
+              {testQuestions &&
+                currentQuestionIndex < testQuestions.questions.length && (
+                  <Quiz
+                    question={testQuestions.questions[currentQuestionIndex]}
+                    onAnswer={handleAnswer}
+                  />
+                )}
             </div>
-            <div id="post-quiz" className="flex flex-col place-items-center hidden">
-            <h2 className="text-3xl mb-2">Quiz Complete</h2>
-            <h2 className="mb-4">Your score is {score} / {testQuestions.questions.length}</h2>
-            <button onClick={() => resetQuiz()} className="w-full rounded border-solid border-2 border-black p-4 bg-black text-white">Take It Again</button>
-            {/* <HomeButton/> */}
-            <button onClick={handleHomeClick} className="w-full rounded border-solid border-2 border-black p-4 mt-8 bg-black text-white">Home</button>
+            <div
+              id="post-quiz"
+              className="flex flex-col place-items-center hidden"
+            >
+              <h2 className="text-3xl mb-2">Quiz Complete</h2>
+              <h2 className="mb-4">
+                Your score is {score} / {testQuestions.questions.length}
+              </h2>
+              <button
+                onClick={() => resetQuiz()}
+                className="w-full rounded border-solid border-2 border-black p-4 bg-black text-white"
+              >
+                Take It Again
+              </button>
+              {/* <HomeButton/> */}
+              <button
+                onClick={handleHomeClick}
+                className="w-full rounded border-solid border-2 border-black p-4 mt-8 bg-black text-white"
+              >
+                Home
+              </button>
             </div>
+          </div>
         </div>
-        </div>
-    </main>
+      </main>
     );
 }
